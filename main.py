@@ -4,6 +4,7 @@ from food import Food
 
 # // Initialize pygame
 pygame.init()
+pygame.font.init()
 
 # // Initalize constants
 WINDOW = 500
@@ -23,6 +24,10 @@ get_random_position = lambda: (random.randrange(*RANGE), random.randrange(*RANGE
 
 # // Main loop
 while True:
+    pygame.display.set_caption(
+        f"Tristan\'s Snake  |   Score: {snake.size}   |   Highscore: {snake.high_score}   |   FPS: {clock.get_fps():.2f}"
+    )
+
     # // Get the pygame events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -35,26 +40,28 @@ while True:
     # // Screen background
     screen.fill("black")
 
-    # // Check if the snake is out of bounds
-    if snake.is_out_of_bounds():
-        snake.reset()
-        food.reset()
-
     # // Draw the food
     pygame.draw.rect(screen, "red", food.item)
 
     # // When the snake eats the food
-    print(f"{snake.body.center}: {food.item.center}")
     if snake.body.center == food.item.center:
         snake.size = snake.size + 1
-        food.item.center = get_random_position()
+
+        # // Make sure the food doesn't spawn inside the snake
+        while food.item.center in [s.center for s in snake.segments]:
+            food.item.center = get_random_position()
     
     # // Draw the snake
-    [pygame.draw.rect(screen, "green", snake.body) for s in snake.segments]
+    [pygame.draw.rect(screen, "green", s) for s in snake.segments]
     
     # // Move the snake
     snake.move()
 
+    # // Check if the snake is out of bounds
+    if snake.had_collision():
+        snake.reset()
+        food.reset()
+
     # // Update the display
     pygame.display.flip()
-    clock.tick(10)
+    clock.tick(60)
