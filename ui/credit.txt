@@ -1,4 +1,4 @@
-The user interface found in this project was produced by BaralTech. 
+The user interface components found in this project was produced by BaralTech. 
 (https://www.youtube.com/watch?v=GMBqjxcKogA)
 
 As of December 16th, 2022, no license regarding the distribution and/or commercial and/or personal use of the content found located
