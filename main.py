@@ -8,9 +8,11 @@ pygame.init()
 SCREEN = pygame.display.set_mode((WINDOW, WINDOW))
 pygame.display.set_caption("Tristan's Snake Summative")
 
+# // Get the custom font
 def get_font(size):
     return pygame.font.Font("assets/font.ttf", size)
 
+# // Display the main menu
 def main_menu():
     while True:
         SCREEN.fill("black")
