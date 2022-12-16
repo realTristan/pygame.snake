@@ -6,8 +6,8 @@ from food import Food
 pygame.init()
 
 # // Initalize constants
-WINDOW = 1000
-TILE_SIZE = 50
+WINDOW = 500
+TILE_SIZE = 25
 RANGE = (TILE_SIZE // 2, WINDOW - TILE_SIZE // 2, TILE_SIZE)
 
 # // Initialize global variables
@@ -30,17 +30,7 @@ while True:
         
         # // When the user presses a key
         if event.type == pygame.KEYDOWN:
-            # // Snake moves up
-            if snake.directions[event.key]["enable"]:
-                snake.current_direction = snake.directions[event.key]["dir"]
-
-                # // Enable all the keys
-                for key in snake.directions.values():
-                    key["enable"] = True
-                
-                # // Disable the opposite key to prevent the snake 
-                # // from going backwards and colliding with itself
-                snake.directions[snake.directions[event.key]["opp"]]["enable"] = False
+            snake.update_direction(event.key)
 
     # // Screen background
     screen.fill("black")
@@ -51,19 +41,20 @@ while True:
         food.reset()
 
     # // Draw the food
-    pygame.draw.rect(screen, "red", food)
+    pygame.draw.rect(screen, "red", food.item)
 
     # // When the snake eats the food
+    print(f"{snake.body.center}: {food.item.center}")
     if snake.body.center == food.item.center:
         snake.size = snake.size + 1
         food.item.center = get_random_position()
     
     # // Draw the snake
-    [pygame.draw.rect(screen, "green", segment) for segment in snake.segments]
+    [pygame.draw.rect(screen, "green", snake.body) for s in snake.segments]
     
     # // Move the snake
     snake.move()
 
     # // Update the display
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(10)
