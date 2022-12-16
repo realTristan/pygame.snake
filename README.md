@@ -1,16 +1,5 @@
 # pygame.snake
 Basic Snake Game built with Python and Pygame
-<<<<<<< HEAD
-=======
-
-# To do
-- Add winning screen
-- Add losing screen
-
-- Add starting menu
-- Add pause menu
-
-- Add option to choose how many apples to spawn in start menu
-- Add option to choose snake speed in start menu
-- Add option to choose amount of obstacles in start menu
->>>>>>> 9d672fb9174011ef5c8d2353665d45a9cd7f77a9
+![pygame summ 3](https://user-images.githubusercontent.com/75189508/208195361-8cabf1fa-0585-4658-99f6-f363f06dc5c8.png)
+![pygame summ 1](https://user-images.githubusercontent.com/75189508/208195364-41b2f3bb-4baf-41b8-a74f-000fa014532d.png)
+![pygame summ 2](https://user-images.githubusercontent.com/75189508/208195366-633cb264-f8cc-4f37-8460-d9b3dc24eab5.png)
