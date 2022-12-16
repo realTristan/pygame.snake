@@ -1,26 +1,24 @@
 import sys, pygame, random
 from game.snake import Snake
 from game.food import Food
-
-# // Initialize pygame
-pygame.init()
-pygame.font.init()
-
-# // Initalize constants
-WINDOW = 500
-TILE_SIZE = 25
-RANGE = (TILE_SIZE // 2, WINDOW - TILE_SIZE // 2, TILE_SIZE)
+from game.obstacle import Obstacle
+from game.constants import WINDOW, RANGE
 
 # // Initialize global variables
 screen = pygame.display.set_mode((WINDOW, WINDOW))
 clock = pygame.time.Clock()
 
-# // Initialize the snake and food variables
-snake = Snake()
-food = Food()
-
 # // Lambda function to get a random position
 get_random_position = lambda: (random.randrange(*RANGE), random.randrange(*RANGE))
+
+# // Create obstacles
+obstacles = []
+for _ in range(15):
+    obstacles.append(Obstacle(obstacles))
+
+# // Initialize the snake and food variables
+snake = Snake(obstacles)
+food = Food(obstacles)
 
 # // Main Game Loop
 def game_loop():
@@ -30,8 +28,9 @@ def game_loop():
         screen.fill("black")
 
         # // Update the score, highscore, fps, etc.
+        score_multiplier = lambda score: 0 if score == 1 else int(snake.high_score * 6.7194)
         pygame.display.set_caption(
-            f"Tristan\'s Snake  |   Score: {snake.size}   |   Highscore: {snake.high_score}   |   FPS: {clock.get_fps():.2f}"
+            f"Tristan\'s Snake  |   Score: {score_multiplier(snake.size)}   |   Highscore: {score_multiplier(snake.high_score)}   |   FPS: {clock.get_fps():.2f}"
         )
 
         # // If the user has a higher score than
@@ -46,34 +45,29 @@ def game_loop():
             
             # // When the user presses a key
             elif event.type == pygame.KEYDOWN:
-                # // Show the pause menu
-                if event.key == pygame.K_ESCAPE or event.key == pygame.K_SPACE:
-                    pass
+                snake.update_direction(event.key)
 
-                # // Else, update the snake direction
-                else: snake.update_direction(event.key)
+        # // Draw obcstacles
+        [pygame.draw.rect(screen, "purple1", obstacle.item) for obstacle in obstacles]
 
         # // Draw the food
-        pygame.draw.rect(screen, "red", food.item)
+        pygame.draw.rect(screen, "red1", food.item)
 
         # // When the snake eats the food
         if snake.body.center == food.item.center:
             snake.size = snake.size + 1
-
-            # // Make sure the food doesn't spawn inside the snake
-            while food.item.center in [s.center for s in snake.segments]:
-                food.item.center = get_random_position()
+            food.reset(obstacles)
         
         # // Draw the snake
-        [pygame.draw.rect(screen, "green", s) for s in snake.segments]
+        [pygame.draw.rect(screen, "green1", s) for s in snake.segments]
         
         # // Move the snake
         snake.move()
 
         # // Check if the snake is out of bounds
-        if snake.had_collision():
-            snake.reset()
-            food.reset()
+        if snake.had_collision(obstacles):
+            snake.reset(obstacles)
+            food.reset(obstacles)
 
         # // Update the display
         pygame.display.flip()

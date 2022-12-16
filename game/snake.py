@@ -1,24 +1,20 @@
+from game.constants import WINDOW, RANGE, TILE_SIZE
 import pygame, random
 
 # // Initialize pygame
 pygame.init()
-
-# // Initalize constants
-WINDOW = 500
-TILE_SIZE = 25
-RANGE = (TILE_SIZE // 2, WINDOW - TILE_SIZE // 2, TILE_SIZE)
 
 # // Lambda function to get a random position
 get_random_position = lambda: (random.randrange(*RANGE), random.randrange(*RANGE))
 
 # // Snake object
 class Snake:
-    def __init__(self):
+    def __init__(self, obstacles):
         self.body = pygame.Rect((0, 0, TILE_SIZE - 2, TILE_SIZE - 2))
         self.high_score = 1
         self.time = 0
         self.time_step = 110
-        self.reset()
+        self.reset(obstacles)
 
     # // Update the snake's direction
     def update_direction(self, event_key):
@@ -27,7 +23,7 @@ class Snake:
             return
 
         # // Check if the key is enabled
-        if self.directions[event_key]["enabled"]:
+        elif self.directions[event_key]["enabled"]:
             self.current_direction = self.directions[event_key]["dir"]
 
             # // Enable all the keys
@@ -48,24 +44,34 @@ class Snake:
             self.segments = self.segments[-self.size:]
     
     # // Check if the snake is out of bounds / collided with itself
-    def had_collision(self):
+    def had_collision(self, obstacles):
         # // Define the out of bounds variables
         too_far_left = self.body.left < 0
         too_far_right = self.body.right > WINDOW
         too_far_top = self.body.top < 0
         too_far_bottom = self.body.bottom > WINDOW
+
+        # // Check if the snake collided with an obstacle
+        for o in obstacles:
+            if self.body.colliderect(o.item):
+                return True
         
         # // Check if the snake collided with itself
-        for s in self.segments[1:self.size - 2]:
-            if s.center == self.body.center:
+        for s in self.segments[:-1]:
+            if self.body.colliderect(s):
                 return True
         
         # // Return whether the snake was out of bounds
         return too_far_left or too_far_right or too_far_top or too_far_bottom
     
     # // Reset the snake
-    def reset(self):
+    def reset(self, obstacles):
+        # // Reset the snake's position (make sure it doesn't overlap with an obstacle)
         self.body.center = get_random_position()
+        while self.body.center in [obstacle.item.center for obstacle in obstacles]:
+            self.body.center = get_random_position()
+
+        # // Reset the rest of the snake's components
         self.segments = [self.body.copy()]
         self.current_direction = (0, 0)
         self.size = 1
