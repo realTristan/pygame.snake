@@ -1,6 +1,6 @@
 The user interface found in this project was produced by BaralTech. 
 (https://www.youtube.com/watch?v=GMBqjxcKogA)
 
-As of December 16th, 2022, no license regarding the distribution and/or commerical and/or personal use of the content found located
+As of December 16th, 2022, no license regarding the distribution and/or commercial and/or personal use of the content found located
 within BaralTech's "Menu-System-PyGame" project repository has been provided. 
 (https://github.com/baraltech/Menu-System-PyGame)
