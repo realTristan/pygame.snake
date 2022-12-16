@@ -1,4 +1,4 @@
-import pygame, random, time
+import pygame, random
 
 # // Initialize pygame
 pygame.init()
@@ -16,7 +16,6 @@ class Snake:
     def __init__(self):
         self.body = pygame.Rect((0, 0, TILE_SIZE - 2, TILE_SIZE - 2))
         self.high_score = 1
-        self.size = 1
         self.time = 0
         self.time_step = 110
         self.reset()
@@ -66,11 +65,6 @@ class Snake:
     
     # // Reset the snake
     def reset(self):
-        # // Set the users highscore
-        if self.size > self.high_score:
-            self.high_score = self.size
-
-        # // Reset the snake's variables
         self.body.center = get_random_position()
         self.segments = [self.body.copy()]
         self.current_direction = (0, 0)
