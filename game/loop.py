@@ -28,7 +28,7 @@ def game_loop():
         screen.fill("black")
 
         # // Update the score, highscore, fps, etc.
-        score_multiplier = lambda score: 0 if score == 1 else int(snake.high_score * 6.7194)
+        score_multiplier = lambda score: 0 if score == 1 else int(score * 6.7194)
         pygame.display.set_caption(
             f"Tristan\'s Snake  |   Score: {score_multiplier(snake.size)}   |   Highscore: {score_multiplier(snake.high_score)}   |   FPS: {clock.get_fps():.2f}"
         )
